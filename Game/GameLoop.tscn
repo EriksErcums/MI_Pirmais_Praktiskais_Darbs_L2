@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bf57p1qh5be7q"]
+
+[ext_resource type="Script" uid="uid://ctfs0ufcwhd6h" path="res://Game/GameLoop.gd" id="1_oeyta"]
+
+[node name="GameLoop" type="Control" unique_id=1605360640 node_paths=PackedStringArray("lb_flavor", "lb_score_p1", "lb_score_p2", "scroll_container", "container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oeyta")
+lb_flavor = NodePath("Scoreboard/Label_Flavor")
+lb_score_p1 = NodePath("Scoreboard/HBox/Label_P1")
+lb_score_p2 = NodePath("Scoreboard/HBox/Label_P2")
+scroll_container = NodePath("ScrollContainer")
+container = NodePath("ScrollContainer/HBoxContainer")
+
+[node name="HBox_Buttons" type="HBoxContainer" parent="." unique_id=1148098710]
+layout_mode = 0
+offset_right = 122.0
+offset_bottom = 40.0
+
+[node name="Btn_Menu" type="Button" parent="HBox_Buttons" unique_id=315262549]
+layout_mode = 2
+text = "Menu"
+
+[node name="Btn_Restart" type="Button" parent="HBox_Buttons" unique_id=409284338]
+layout_mode = 2
+text = "Restart"
+
+[node name="Scoreboard" type="VBoxContainer" parent="." unique_id=1508144915]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_right = 80.0
+offset_bottom = 50.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="Scoreboard" unique_id=478455404]
+layout_mode = 2
+alignment = 1
+
+[node name="Label_P1" type="Label" parent="Scoreboard/HBox" unique_id=1882543157]
+layout_mode = 2
+text = "0"
+
+[node name="Label_P2" type="Label" parent="Scoreboard/HBox" unique_id=994981995]
+layout_mode = 2
+text = "0"
+
+[node name="Label_Flavor" type="RichTextLabel" parent="Scoreboard" unique_id=564011041]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+bbcode_enabled = true
+text = "[wave amp=20.0 freq=5.0]...[/wave]"
+scroll_active = false
+autowrap_mode = 0
+autowrap_trim_flags = 0
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+justification_flags = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=214148124]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -167.25
+offset_top = -26.0
+offset_right = 167.25
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer" unique_id=941770865]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+size_flags_horizontal = 4

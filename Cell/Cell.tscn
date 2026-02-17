@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b7t13c10inr82"]
+
+[ext_resource type="Theme" uid="uid://06p3ln6yr5lg" path="res://Cell/Cell_Theme.tres" id="1_amw0d"]
+[ext_resource type="Script" uid="uid://crtd2m0y6bkjg" path="res://Cell/Cell.gd" id="2_sg20i"]
+
+[node name="Button" type="Button" unique_id=1038962122]
+custom_minimum_size = Vector2(30, 30)
+offset_right = 30.0
+offset_bottom = 31.0
+size_flags_vertical = 4
+theme = ExtResource("1_amw0d")
+toggle_mode = true
+text = "1"
+script = ExtResource("2_sg20i")
