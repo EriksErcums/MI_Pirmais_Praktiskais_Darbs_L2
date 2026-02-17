@@ -118,34 +118,33 @@ func _on_cell_clicked(cell: Cell) -> void:
 		return
 	
 	# Selecting second cell // move
-	_pop_cells(cell, cur_cell)
+	_pop_cells(cur_cell, cell)
 	cur_cell = null
 
 # Use this to finish bot's turn with 1 cell
 func _pop_cell() -> void:
-	state.process_turn(state, -1, -1, turn)
+	state.process_turn(-1, -1, turn)
 	finish_game()
 
 # Use this for finishing bot's move
 func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 	# Process & clean
-	state.process_turn(state, cell1.id, cell2.id, turn)
+	state.process_turn(cell1.id, cell2.id, turn)
 	cells.remove_at(cell2.id)
 	cell2.queue_free()
 	
 	# Update visually
-	var cap_id: int = min(cell1.id, cells.size()-1)
-	cell1.text = str(state.nums[cap_id])
-	cell1.button_pressed = false
 	for i: int in cells.size():
 		var c: Cell = cells[i]
 		c.id = i
 		c.modulate = Color.WHITE
+	cell1.text = str(state.nums[cell1.id])
+	cell1.button_pressed = false
 	cell1.modulate = COLOR_SHINE
 	
 	# Rebind neighbors
 	var left_id: int = cell1.id-1
-	if left_id > 0:
+	if left_id > -1:
 		cells[left_id].right = cell1
 		cell1.left = cells[left_id]
 	var right_id: int = cell1.id+1
