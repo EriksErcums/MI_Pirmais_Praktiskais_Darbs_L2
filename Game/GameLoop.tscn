@@ -71,22 +71,19 @@ justification_flags = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=214148124]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = -1
+anchor_left = 0.1
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.9
 anchor_bottom = 0.5
-offset_left = -167.25
-offset_top = -26.0
-offset_right = 167.25
-offset_bottom = 26.0
+offset_top = -21.5
+offset_bottom = 21.5
 grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true
-horizontal_scroll_mode = 2
 vertical_scroll_mode = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer" unique_id=941770865]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 6

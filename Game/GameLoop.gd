@@ -118,7 +118,7 @@ func _on_cell_clicked(cell: Cell) -> void:
 		return
 	
 	# Selecting second cell // move
-	_pop_cells(cell, cur_cell)
+	_pop_cells(cur_cell, cell)
 	cur_cell = null
 
 # Use this to finish bot's turn with 1 cell

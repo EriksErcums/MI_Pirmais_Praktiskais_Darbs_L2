@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="AI Project Game"
-run/main_scene="uid://bf57p1qh5be7q"
+run/main_scene="uid://dtbxf80dbs1oi"
 config/features=PackedStringArray("4.6", "Forward Plus")
 
 [physics]
