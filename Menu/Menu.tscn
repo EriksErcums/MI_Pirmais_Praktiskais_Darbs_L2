@@ -2,18 +2,22 @@
 
 [ext_resource type="Script" uid="uid://fihf0ev1f32q" path="res://Menu/Menu.gd" id="1_5o4np"]
 
-[node name="Menu" type="Control" unique_id=1850912427 node_paths=PackedStringArray("slider_cells", "label_cells", "checkbox_turn", "checkbutton_algo", "button_play")]
+[node name="Menu" type="Control" unique_id=1850912427 node_paths=PackedStringArray("slider_cells", "label_cells", "checkbutton_turn", "checkbutton_algo", "button_play")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -22.0
+offset_right = 2.0
+offset_bottom = -22.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5o4np")
 slider_cells = NodePath("VBox/VBox_Cells/Slider_Container/HSlider")
 label_cells = NodePath("VBox/VBox_Cells/Slider_Container/Label")
-checkbox_turn = NodePath("VBox/CheckBox_Turn")
-checkbutton_algo = NodePath("VBox/VBox_Algo/Switch/CheckButton")
+checkbutton_turn = NodePath("VBox/VBox_Turn/Switch/CheckButton_Turn")
+checkbutton_algo = NodePath("VBox/VBox_Algo/Switch/CheckButton_Algo")
 button_play = NodePath("VBox/Button_Play")
 
 [node name="VBox" type="VBoxContainer" parent="." unique_id=1033622768]
@@ -55,11 +59,27 @@ value = 15.0
 layout_mode = 2
 text = "15"
 
-[node name="CheckBox_Turn" type="CheckBox" parent="VBox" unique_id=1352331425]
+[node name="VBox_Turn" type="VBoxContainer" parent="VBox" unique_id=2060832822]
 layout_mode = 2
-size_flags_horizontal = 4
-text = "First turn"
-alignment = 1
+
+[node name="Label" type="Label" parent="VBox/VBox_Turn" unique_id=869712202]
+layout_mode = 2
+text = "Choose which will start"
+horizontal_alignment = 1
+
+[node name="Switch" type="HBoxContainer" parent="VBox/VBox_Turn" unique_id=1783255641]
+layout_mode = 2
+
+[node name="Label_Player" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1127418257]
+layout_mode = 2
+text = "  Player   "
+
+[node name="CheckButton_Turn" type="CheckButton" parent="VBox/VBox_Turn/Switch" unique_id=836162310]
+layout_mode = 2
+
+[node name="Label2_Computer" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1631071033]
+layout_mode = 2
+text = "Computer"
 
 [node name="VBox_Algo" type="VBoxContainer" parent="VBox" unique_id=1998738718]
 layout_mode = 2
@@ -76,7 +96,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Minimax"
 
-[node name="CheckButton" type="CheckButton" parent="VBox/VBox_Algo/Switch" unique_id=1348725397]
+[node name="CheckButton_Algo" type="CheckButton" parent="VBox/VBox_Algo/Switch" unique_id=1348725397]
 layout_mode = 2
 
 [node name="Label2_Alpha" type="Label" parent="VBox/VBox_Algo/Switch" unique_id=1262411838]

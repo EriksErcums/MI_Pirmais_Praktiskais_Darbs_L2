@@ -11,7 +11,7 @@ const GAME_PATH: String = "res://Game/GameLoop.tscn"
 # functions too, but they are slower and more inconvinient
 @export var slider_cells: HSlider
 @export var label_cells: Label
-@export var checkbox_turn: CheckBox
+@export var checkbutton_turn: CheckButton
 @export var checkbutton_algo: CheckButton
 @export var button_play: Button
 
@@ -22,12 +22,12 @@ var pruning: bool = false
 func _ready() -> void:
 	label_cells.text = str(cells)
 	slider_cells.value = cells
-	checkbox_turn.button_pressed = turn
+	checkbutton_turn.button_pressed = turn
 	checkbutton_algo.button_pressed = pruning
 	
 	slider_cells.value_changed.connect(_on_slider_changed)
-	checkbox_turn.toggled.connect(_on_checkbox_toggled)
-	checkbutton_algo.toggled.connect(_on_checkbutton_toggled)
+	checkbutton_turn.toggled.connect(_on_checkbutton_turn_toggled)
+	checkbutton_algo.toggled.connect(_on_checkbutton_algo_toggled)
 	button_play.pressed.connect(_on_play_pressed)
 	
 	button_play.grab_focus()
@@ -36,10 +36,10 @@ func _on_slider_changed(value: int) -> void:
 	cells = value
 	label_cells.text = str(value)
 
-func _on_checkbox_toggled(value: bool) -> void:
+func _on_checkbutton_turn_toggled(value: bool) -> void:
 	turn = value
 
-func _on_checkbutton_toggled(value: bool) -> void:
+func _on_checkbutton_algo_toggled(value: bool) -> void:
 	pruning = value
 
 func _on_play_pressed() -> void:
