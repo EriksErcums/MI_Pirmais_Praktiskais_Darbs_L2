@@ -118,33 +118,34 @@ func _on_cell_clicked(cell: Cell) -> void:
 		return
 	
 	# Selecting second cell // move
-	_pop_cells(cur_cell, cell)
+	_pop_cells(cell, cur_cell)
 	cur_cell = null
 
 # Use this to finish bot's turn with 1 cell
 func _pop_cell() -> void:
-	state.process_turn(-1, -1, turn)
+	_process_turn(state, -1, -1, turn)
 	finish_game()
 
 # Use this for finishing bot's move
 func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 	# Process & clean
-	state.process_turn(cell1.id, cell2.id, turn)
+	_process_turn(state, cell1.id, cell2.id, turn)
 	cells.remove_at(cell2.id)
 	cell2.queue_free()
 	
 	# Update visually
+	var cap_id: int = min(cell1.id, cells.size()-1)
+	cell1.text = str(state.nums[cap_id])
+	cell1.button_pressed = false
 	for i: int in cells.size():
 		var c: Cell = cells[i]
 		c.id = i
 		c.modulate = Color.WHITE
-	cell1.text = str(state.nums[cell1.id])
-	cell1.button_pressed = false
 	cell1.modulate = COLOR_SHINE
 	
 	# Rebind neighbors
 	var left_id: int = cell1.id-1
-	if left_id > -1:
+	if left_id > 0:
 		cells[left_id].right = cell1
 		cell1.left = cells[left_id]
 	var right_id: int = cell1.id+1
@@ -153,3 +154,23 @@ func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 		cells[right_id].left = cell1
 	
 	assign_turn()
+
+# Use this for simulating turns
+func _process_turn(_state: State, pos1: int, pos2: int, _turn: bool) -> void:
+	# Player erased last cell
+	if pos1 == -1 && pos2 == -1:
+		if turn: _state.p1_score -= 1
+		else: _state.p2_score -= 1
+		_state.nums.clear()
+		return
+	
+	# Player merged 2 cells into 1
+	var sum: int = state.nums[pos1] + state.nums[pos2]
+	var score: int = 2 if sum == 7 else 1
+	
+	if sum > 6: _state.nums[pos1] = sum - 6
+	else: _state.nums[pos1] = sum
+	_state.nums.remove_at(pos2)
+	
+	if _turn: _state.p2_score += score
+	else: _state.p1_score += score

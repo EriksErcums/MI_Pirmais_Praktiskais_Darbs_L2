@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://dtbxf80dbs1oi"]
+
+[ext_resource type="Script" uid="uid://fihf0ev1f32q" path="res://Menu/Menu.gd" id="1_5o4np"]
+
+[node name="Menu" type="Control" unique_id=1850912427 node_paths=PackedStringArray("slider_cells", "label_cells", "checkbox_turn", "checkbutton_algo", "button_play")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5o4np")
+slider_cells = NodePath("VBox/VBox_Cells/Slider_Container/HSlider")
+label_cells = NodePath("VBox/VBox_Cells/Slider_Container/Label")
+checkbox_turn = NodePath("VBox/CheckBox_Turn")
+checkbutton_algo = NodePath("VBox/VBox_Algo/Switch/CheckButton")
+button_play = NodePath("VBox/Button_Play")
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1033622768]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -102.5
+offset_top = -87.5
+offset_right = 102.5
+offset_bottom = 87.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="VBox_Cells" type="VBoxContainer" parent="VBox" unique_id=1472666693]
+layout_mode = 2
+alignment = 1
+
+[node name="Label_Cells" type="Label" parent="VBox/VBox_Cells" unique_id=716903441]
+layout_mode = 2
+text = "Number of cells"
+horizontal_alignment = 1
+
+[node name="Slider_Container" type="HBoxContainer" parent="VBox/VBox_Cells" unique_id=2140814858]
+layout_mode = 2
+alignment = 1
+
+[node name="HSlider" type="HSlider" parent="VBox/VBox_Cells/Slider_Container" unique_id=744467832]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+min_value = 15.0
+max_value = 25.0
+value = 15.0
+
+[node name="Label" type="Label" parent="VBox/VBox_Cells/Slider_Container" unique_id=1477751005]
+layout_mode = 2
+text = "15"
+
+[node name="CheckBox_Turn" type="CheckBox" parent="VBox" unique_id=1352331425]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "First turn"
+alignment = 1
+
+[node name="VBox_Algo" type="VBoxContainer" parent="VBox" unique_id=1998738718]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBox/VBox_Algo" unique_id=1983409225]
+layout_mode = 2
+text = "Search Algorithm"
+horizontal_alignment = 1
+
+[node name="Switch" type="HBoxContainer" parent="VBox/VBox_Algo" unique_id=2144903752]
+layout_mode = 2
+
+[node name="Label_Mini" type="Label" parent="VBox/VBox_Algo/Switch" unique_id=1347421492]
+layout_mode = 2
+text = "Minimax"
+
+[node name="CheckButton" type="CheckButton" parent="VBox/VBox_Algo/Switch" unique_id=1348725397]
+layout_mode = 2
+
+[node name="Label2_Alpha" type="Label" parent="VBox/VBox_Algo/Switch" unique_id=1262411838]
+layout_mode = 2
+text = "Alpha-Beta"
+
+[node name="Button_Play" type="Button" parent="VBox" unique_id=1367634212]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Play"

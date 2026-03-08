@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bf57p1qh5be7q"]
 
 [ext_resource type="Script" uid="uid://ctfs0ufcwhd6h" path="res://Game/GameLoop.gd" id="1_oeyta"]
+[ext_resource type="Script" uid="uid://diswg7wcid7ut" path="res://Game/GUI_Buttons.gd" id="2_0ir4a"]
 
 [node name="GameLoop" type="Control" unique_id=1605360640 node_paths=PackedStringArray("lb_flavor", "lb_score_p1", "lb_score_p2", "scroll_container", "container")]
 layout_mode = 3
@@ -16,10 +17,14 @@ lb_score_p2 = NodePath("Scoreboard/HBox/Label_P2")
 scroll_container = NodePath("ScrollContainer")
 container = NodePath("ScrollContainer/HBoxContainer")
 
-[node name="HBox_Buttons" type="HBoxContainer" parent="." unique_id=1148098710]
+[node name="HBox_Buttons" type="HBoxContainer" parent="." unique_id=1148098710 node_paths=PackedStringArray("game", "btn_menu", "btn_restart")]
 layout_mode = 0
 offset_right = 122.0
 offset_bottom = 40.0
+script = ExtResource("2_0ir4a")
+game = NodePath("..")
+btn_menu = NodePath("Btn_Menu")
+btn_restart = NodePath("Btn_Restart")
 
 [node name="Btn_Menu" type="Button" parent="HBox_Buttons" unique_id=315262549]
 layout_mode = 2
