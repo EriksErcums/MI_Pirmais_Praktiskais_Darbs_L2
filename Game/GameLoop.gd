@@ -70,6 +70,8 @@ func assign_turn() -> void:
 		lb_flavor.text = P2_TURN_STR
 		# Block the gameboard and make the bot move
 	turn = !turn
+	
+	print(state.nums)
 
 func finish_game() -> void:
 	finished.emit(state.p1_score > state.p2_score)
@@ -134,25 +136,30 @@ func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 	cell2.queue_free()
 	
 	# Update visually
-	var cap_id: int = min(cell1.id, cells.size()-1)
-	cell1.text = str(state.nums[cap_id])
 	cell1.button_pressed = false
 	for i: int in cells.size():
 		var c: Cell = cells[i]
 		c.id = i
 		c.modulate = Color.WHITE
+	var cap_id: int = min(cell1.id, cells.size()-1)
+	cell1.text = str(state.nums[cap_id])
 	cell1.modulate = COLOR_SHINE
 	
 	# Rebind neighbors
-	var left_id: int = cell1.id-1
-	if left_id > 0:
+	var left_id: int = cell1.id - 1
+	if left_id >= 0:
 		cells[left_id].right = cell1
 		cell1.left = cells[left_id]
-	var right_id: int = cell1.id+1
+	else:
+		cell1.left = null
+
+	var right_id: int = cell1.id + 1
 	if right_id < cells.size():
 		cell1.right = cells[right_id]
 		cells[right_id].left = cell1
-	
+	else:
+		cell1.right = null
+		
 	assign_turn()
 
 # Use this for simulating turns
