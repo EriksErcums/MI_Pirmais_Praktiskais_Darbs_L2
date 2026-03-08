@@ -70,8 +70,6 @@ func assign_turn() -> void:
 		lb_flavor.text = P2_TURN_STR
 		# Block the gameboard and make the bot move
 	turn = !turn
-	
-	print(state.nums)
 
 func finish_game() -> void:
 	finished.emit(state.p1_score > state.p2_score)
