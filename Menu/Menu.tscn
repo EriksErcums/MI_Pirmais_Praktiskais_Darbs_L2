@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://fihf0ev1f32q" path="res://Menu/Menu.gd" id="1_5o4np"]
 
-[node name="Menu" type="Control" unique_id=1850912427 node_paths=PackedStringArray("slider_cells", "label_cells", "checkbutton_turn", "checkbutton_algo", "button_play")]
+[node name="Menu" type="Control" unique_id=1850912427 node_paths=PackedStringArray("slider_cells", "label_cells", "checkbtn_turn", "checkbtn_algo", "button_play")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,8 +16,8 @@ grow_vertical = 2
 script = ExtResource("1_5o4np")
 slider_cells = NodePath("VBox/VBox_Cells/Slider_Container/HSlider")
 label_cells = NodePath("VBox/VBox_Cells/Slider_Container/Label")
-checkbutton_turn = NodePath("VBox/VBox_Turn/Switch/CheckButton_Turn")
-checkbutton_algo = NodePath("VBox/VBox_Algo/Switch/CheckButton_Algo")
+checkbtn_turn = NodePath("VBox/VBox_Turn/Switch/CheckButton_Turn")
+checkbtn_algo = NodePath("VBox/VBox_Algo/Switch/CheckButton_Algo")
 button_play = NodePath("VBox/Button_Play")
 
 [node name="VBox" type="VBoxContainer" parent="." unique_id=1033622768]
@@ -70,14 +70,15 @@ horizontal_alignment = 1
 [node name="Switch" type="HBoxContainer" parent="VBox/VBox_Turn" unique_id=1783255641]
 layout_mode = 2
 
-[node name="Label_Player" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1127418257]
+[node name="Label_Computer" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1127418257]
 layout_mode = 2
 text = "  Player   "
 
 [node name="CheckButton_Turn" type="CheckButton" parent="VBox/VBox_Turn/Switch" unique_id=836162310]
 layout_mode = 2
+button_pressed = true
 
-[node name="Label2_Computer" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1631071033]
+[node name="Label2_Player" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1631071033]
 layout_mode = 2
 text = "Computer"
 
