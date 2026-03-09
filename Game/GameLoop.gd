@@ -69,9 +69,10 @@ func assign_turn() -> void:
 		# Bot turn
 		lb_flavor.text = P2_TURN_STR
 		# \/ remove this when bot is implemented
-		cells[0].grab_focus()
+		#cells[0].grab_focus()
+		call_deferred("_bot_move")
 		# Block the gameboard and make the bot move
-	turn = !turn
+	#turn = !turn
 
 func finish_game() -> void:
 	finished.emit(state.p1_score > state.p2_score)
@@ -154,4 +155,21 @@ func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 		cell1.right = cells[right_id]
 		cells[right_id].left = cell1
 	
-	assign_turn()
+	turn = !turn
+	if cells.size() == 1:
+		finish_game()
+	else:
+		assign_turn()
+
+func _bot_move() -> void:
+	if cells.size() <= 1:
+		finish_game()
+		return
+	
+	var move := Algorithms.best_move(state, 4)
+	
+	if move.x == -1:
+		_pop_cell()
+		return
+	
+	_pop_cells(cells[move.x], cells[move.y])
