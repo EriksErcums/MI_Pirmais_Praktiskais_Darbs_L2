@@ -166,7 +166,13 @@ func _bot_move() -> void:
 		finish_game()
 		return
 	
-	var move := Algorithms.best_move(state, 4)
+	var move: Vector2i
+	
+	# Choose algorithm depending on pruning flag
+	if pruning:
+		move = Algorithms.best_move_alphabeta(state, 6) # use Alpha-Beta
+	else:
+		move = Algorithms.best_move_minimax(state, 4) # use Minimax
 	
 	if move.x == -1:
 		_pop_cell()
