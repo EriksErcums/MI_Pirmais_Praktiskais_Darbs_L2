@@ -26,8 +26,8 @@ func _ready() -> void:
 	checkbutton_algo.button_pressed = pruning
 	
 	slider_cells.value_changed.connect(_on_slider_changed)
-	checkbutton_turn.toggled.connect(_on_checkbutton_turn_toggled)
-	checkbutton_algo.toggled.connect(_on_checkbutton_algo_toggled)
+	checkbutton_turn.toggled.connect(_on_checkbtn_turn_toggled)
+	checkbutton_algo.toggled.connect(_on_checkbtn_algo_toggled)
 	button_play.pressed.connect(_on_play_pressed)
 	
 	button_play.grab_focus()
@@ -36,10 +36,10 @@ func _on_slider_changed(value: int) -> void:
 	cells = value
 	label_cells.text = str(value)
 
-func _on_checkbutton_turn_toggled(value: bool) -> void:
+func _on_checkbtn_turn_toggled(value: bool) -> void:
 	turn = value
 
-func _on_checkbutton_algo_toggled(value: bool) -> void:
+func _on_checkbtn_algo_toggled(value: bool) -> void:
 	pruning = value
 
 func _on_play_pressed() -> void:
@@ -47,7 +47,6 @@ func _on_play_pressed() -> void:
 	var game: GameLoop = game_scene.instantiate()
 	game.cells_max = cells
 	game.turn = turn
-	game.init_turn = turn
 	game.pruning = pruning
 	get_parent().add_child(game)
 	queue_free()
