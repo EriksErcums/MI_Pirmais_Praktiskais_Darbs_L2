@@ -16,13 +16,13 @@ const GAME_PATH: String = "res://Game/GameLoop.tscn"
 @export var button_play: Button
 
 var cells: int = 15
-var turn: bool = true
+var p2_turn: bool = false
 var pruning: bool = false
 
 func _ready() -> void:
 	label_cells.text = str(cells)
 	slider_cells.value = cells
-	checkbtn_turn.button_pressed = turn
+	checkbtn_turn.button_pressed = p2_turn
 	checkbtn_algo.button_pressed = pruning
 	
 	slider_cells.value_changed.connect(_on_slider_changed)
@@ -37,7 +37,7 @@ func _on_slider_changed(value: int) -> void:
 	label_cells.text = str(value)
 
 func _on_checkbtn_turn_toggled(value: bool) -> void:
-	turn = value
+	p2_turn = value
 
 func _on_checkbtn_algo_toggled(value: bool) -> void:
 	pruning = value
@@ -46,8 +46,8 @@ func _on_play_pressed() -> void:
 	var game_scene: PackedScene = load(GAME_PATH)
 	var game: GameLoop = game_scene.instantiate()
 	game.cells_max = cells
-	game.turn = turn
-	game.init_turn = turn
+	game.p2_turn = p2_turn
+	game.init_turn = p2_turn
 	game.pruning = pruning
 	get_parent().add_child(game)
 	queue_free()

@@ -21,8 +21,8 @@ const DRAFT_STR: String = "Draft!"
 const COLOR_SHINE: Color = Color(4.5, 4.5, 4.5)
 
 # Data
-var turn: bool = true
-var init_turn: bool = true
+var p2_turn: bool = false
+var init_turn: bool = false
 var pruning: bool = false
 var cells_max: int = 15
 
@@ -50,7 +50,6 @@ func _ready() -> void:
 			cell_prev.right = cell
 		cell_prev = cell
 		cells.append(cell)
-		
 	
 	game_tree = GameTree.new(state, -1)
 	assign_turn()
@@ -61,18 +60,26 @@ func _ready() -> void:
 func assign_turn() -> void:
 	lb_score_p1.text = str(state.p1_score)
 	lb_score_p2.text = str(state.p2_score)
-	if turn:
+	if p2_turn:
+		# Bot turn
+		lb_flavor.text = P2_TURN_STR
+		# Blocks the board
+		container.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
+		container.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
+		if cells.size() > 1:
+			await get_tree().create_timer(1.5).timeout
+			var move: Vector2i = Algorithms.best_move(state, 4, pruning)
+			_pop_cells(cells[move.x], cells[move.y])
+		else:
+			await get_tree().create_timer(0.75).timeout
+			_pop_cell()
+		# Unblocks the board
+		container.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_INHERITED
+		container.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_INHERITED
+	else:
 		# Player turn
 		lb_flavor.text = P1_TURN_STR
 		cells[0].grab_focus()
-	else:
-		# Bot turn
-		lb_flavor.text = P2_TURN_STR
-		# \/ remove this when bot is implemented
-		#cells[0].grab_focus()
-		call_deferred("_bot_move")
-		# Block the gameboard and make the bot move
-	#turn = !turn
 
 func finish_game() -> void:
 	finished.emit(state.p1_score > state.p2_score)
@@ -126,13 +133,13 @@ func _on_cell_clicked(cell: Cell) -> void:
 
 # Use this to finish bot's turn with 1 cell
 func _pop_cell() -> void:
-	state.process_turn(-1, -1, turn)
+	state.process_turn(-1, -1, p2_turn)
 	finish_game()
 
 # Use this for finishing bot's move
 func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 	# Process & clean
-	state.process_turn(cell1.id, cell2.id, turn)
+	state.process_turn(cell1.id, cell2.id, p2_turn)
 	cells.remove_at(cell2.id)
 	cell2.queue_free()
 	
@@ -155,21 +162,6 @@ func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 		cell1.right = cells[right_id]
 		cells[right_id].left = cell1
 	
-	turn = !turn
-	if cells.size() == 1:
-		finish_game()
-	else:
-		assign_turn()
-
-func _bot_move() -> void:
-	if cells.size() <= 1:
-		finish_game()
-		return
+	p2_turn = !p2_turn
+	assign_turn.call_deferred()
 	
-	var move := Algorithms.best_move(state, 4)
-	
-	if move.x == -1:
-		_pop_cell()
-		return
-	
-	_pop_cells(cells[move.x], cells[move.y])

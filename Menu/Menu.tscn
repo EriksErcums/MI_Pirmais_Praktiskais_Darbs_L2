@@ -7,10 +7,6 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = -22.0
-offset_right = 2.0
-offset_bottom = -22.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5o4np")
@@ -27,10 +23,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -102.5
-offset_top = -87.5
-offset_right = 102.5
-offset_bottom = 87.5
+offset_left = -119.75
+offset_top = -97.5
+offset_right = 119.75
+offset_bottom = 97.5
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -72,7 +68,9 @@ layout_mode = 2
 
 [node name="Label_Computer" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1127418257]
 layout_mode = 2
-text = "  Player   "
+size_flags_horizontal = 3
+text = "Player"
+horizontal_alignment = 2
 
 [node name="CheckButton_Turn" type="CheckButton" parent="VBox/VBox_Turn/Switch" unique_id=836162310]
 layout_mode = 2
@@ -80,6 +78,7 @@ button_pressed = true
 
 [node name="Label2_Player" type="Label" parent="VBox/VBox_Turn/Switch" unique_id=1631071033]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Computer"
 
 [node name="VBox_Algo" type="VBoxContainer" parent="VBox" unique_id=1998738718]
@@ -95,13 +94,16 @@ layout_mode = 2
 
 [node name="Label_Mini" type="Label" parent="VBox/VBox_Algo/Switch" unique_id=1347421492]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Minimax"
+horizontal_alignment = 2
 
 [node name="CheckButton_Algo" type="CheckButton" parent="VBox/VBox_Algo/Switch" unique_id=1348725397]
 layout_mode = 2
 
 [node name="Label2_Alpha" type="Label" parent="VBox/VBox_Algo/Switch" unique_id=1262411838]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Alpha-Beta"
 
 [node name="Button_Play" type="Button" parent="VBox" unique_id=1367634212]

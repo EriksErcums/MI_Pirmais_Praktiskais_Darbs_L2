@@ -18,7 +18,7 @@ func _on_menu() -> void:
 	var menu_scene: PackedScene = load(MENU_PATH)
 	var menu: Menu = menu_scene.instantiate()
 	menu.cells = game.cells_max
-	menu.turn = game.init_turn
+	menu.p2_turn = game.init_turn
 	menu.pruning = game.pruning
 	game.get_parent().add_child(menu)
 	game.queue_free()

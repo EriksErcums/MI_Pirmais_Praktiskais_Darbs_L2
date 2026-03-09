@@ -1,54 +1,81 @@
 class_name Algorithms extends Object
-# \/ remove when implemented
-@warning_ignore_start("unused_parameter")
 
-static func best_move(state: State, depth: int) -> Vector2i:
-	var best_score := -INF
-	var _best_move := Vector2i(-1, -1)
-	
+const MIN_INT: int = -99999
+const MAX_INT: int = 99999
+const PLAYER_MOVE: bool = false
+const BOT_MOVE: bool = true
+
+static func best_move(state: State, depth: int, prune: bool) -> Vector2i:
+	var best_score: int = MIN_INT
+	var move: Vector2i = Vector2i(-1, -1)
 	print("Board:", state.nums)
 	
-	for i in range(state.nums.size() - 1):
-		var new_state := state.clone()
-		# Player 2 makes its move
-		new_state.process_turn(i, i + 1, false)
-		# Player 1 responds next
-		var score := minimax(new_state, depth - 1, false)
+	for i: int in state.nums.size() - 1:
+		var _state: State = state.clone()
+		_state.process_turn(i, i+1, BOT_MOVE)
+		var score: int
+		if prune: score = alphabeta(_state, depth, best_score, MAX_INT, PLAYER_MOVE)
+		else: score = minimax(_state, depth, PLAYER_MOVE)
 		
-		var a := state.nums[i]
-		var b := state.nums[i + 1]
-		print("Move ", i, "+", i+1, " (", a, "+", b, ") -> score:", score)
-		
+		print("Move ", i, "+", i+1, " -> score:", score)
 		if score > best_score:
 			best_score = score
-			_best_move = Vector2i(i, i + 1)
-	
-	print("Chosen move:", _best_move, " score:", best_score)
-	print("----------------------")
-	return _best_move
+			move = Vector2i(i, i+1)
+	print("Chosen move:", move, " score:", best_score, "\n")
+	return move
 
 static func minimax(state: State, depth: int, is_maxing: bool) -> int:
 	# Terminal state
-	if state.nums.size() <= 1 or depth == 0:
+	if state.nums.size() <= 1 || depth == 0:
 		return state.eval()
 	
-	# Is players 2 turn
 	if is_maxing:
-		var best = -INF
-		for i in range(state.nums.size() - 1):
-			var new_state : State = state.clone()
-			new_state.process_turn(i, i + 1, false) # False = player 2 acts
-			var score := minimax(new_state, depth - 1, false) # Player 1 next
+		var best: int = MIN_INT
+		for i: int in state.nums.size()-1:
+			var _state: State = state.clone()
+			_state.process_turn(i, i+1, BOT_MOVE)
+			var score: int = minimax(_state, depth-1, PLAYER_MOVE)
 			best = max(best, score)
 		return best
 	else:
-		var best = INF
-		for i in range(state.nums.size() - 1):
-			var new_state : State = state.clone()
-			new_state.process_turn(i, i + 1, true) # True = player 1 acts
-			var score := minimax(new_state, depth - 1, true) # Player 2 next
+		var best: int = MAX_INT
+		for i: int in state.nums.size()-1:
+			var _state: State = state.clone()
+			_state.process_turn(i, i+1, PLAYER_MOVE)
+			var score: int = minimax(_state, depth-1, BOT_MOVE)
 			best = min(best, score)
 		return best
 
+
 static func alphabeta(state: State, depth: int, alpha: int, beta: int, is_maxing: bool) -> int:
-	return 0
+	# Terminal state
+	if state.nums.size() <= 1 || depth == 0:
+		return state.eval()
+	
+	# Player 2 (Computer) turn - maximize
+	if is_maxing:
+		var best: int = MIN_INT
+		for i: int in state.nums.size()-1:
+			var _state: State = state.clone()
+			_state.process_turn(i, i+1, BOT_MOVE)
+			var score: int = alphabeta(_state, depth-1, alpha, beta, PLAYER_MOVE)
+			best = max(best, score)
+			alpha = max(alpha, best)
+			
+			# pruning condition
+			if beta <= alpha: break
+		return best
+	
+	# Player 1 turn - minimize
+	else:
+		var best: int = MAX_INT
+		for i: int in state.nums.size()-1:
+			var _state: State = state.clone()
+			_state.process_turn(i, i+1, PLAYER_MOVE)
+			var score: int = alphabeta(_state, depth-1, alpha, beta, BOT_MOVE)
+			best = min(best, score)
+			beta = min(beta, best)
+			
+			#pruning condition
+			if beta <= alpha: break
+		return best
