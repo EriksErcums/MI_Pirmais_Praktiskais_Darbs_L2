@@ -8,8 +8,8 @@ var p2_score: int = 0
 func process_turn(pos1: int, pos2: int, p2_turn: bool) -> void:
 	# Player erased last cell
 	if pos1 == -1 && pos2 == -1:
-		if p2_turn: p2_score -= 1
-		else: p1_score -= 1
+		if p2_turn: p1_score -= 1
+		else: p2_score -= 1
 		nums.clear()
 		return
 	
@@ -34,7 +34,7 @@ func eval() -> int:
 		elif sum == 6 || sum == 8: score += 8
 		elif sum == 5 || sum == 9: score += 3
 		
-		if sum > 6: sum -= 6
+		if sum > 7: sum -= 6
 		if sum == 3 || sum == 4: score += 2
 	return score
 
