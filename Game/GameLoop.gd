@@ -20,23 +20,29 @@ const P2_WON_STR: String = "You lost!"
 const DRAFT_STR: String = "Draft!"
 const COLOR_SHINE: Color = Color(4.5, 4.5, 4.5)
 
-# Data
-var p2_turn: bool = false
+# Input
 var init_turn: bool = false
 var pruning: bool = false
 var cells_max: int = 15
 
+# Game state
+var p2_turn: bool = false
 var game_tree: GameTree
 var state: State
 var cur_cell: Cell
 var cells: Array[Cell]
-
+var algo_thread: Thread
+# https://docs.godotengine.org/en/stable/tutorials/performance/using_multiple_threads.html
 
 
 # Init
 func _ready() -> void:
+	algo_thread = Thread.new()
+	p2_turn = init_turn
 	state = State.new()
 	state.nums.resize(cells_max)
+	cells.resize(cells_max)
+	
 	var cell_prev: Cell = null
 	for i: int in cells_max:
 		state.nums[i] = randi_range(MIN_NUM, MAX_NUM)
@@ -49,11 +55,13 @@ func _ready() -> void:
 			cell.left = cell_prev
 			cell_prev.right = cell
 		cell_prev = cell
-		cells.append(cell)
+		cells[i] = cell
 	
 	game_tree = GameTree.new(state, -1)
 	assign_turn()
 
+func _exit_tree() -> void:
+	if algo_thread.is_alive(): algo_thread.wait_to_finish()
 
 
 # --- Commands ---
@@ -68,7 +76,11 @@ func assign_turn() -> void:
 		container.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
 		if cells.size() > 1:
 			await get_tree().create_timer(1.5).timeout
-			var move: Vector2i = Algorithms.best_move(state, 4, pruning)
+			var algo_call: Callable = Algorithms.best_move.bind(state, 4, pruning)
+			algo_thread.start(algo_call)
+			var tree: SceneTree = get_tree()
+			while algo_thread.is_alive(): await tree.physics_frame
+			var move: Vector2i = algo_thread.wait_to_finish()
 			_pop_cells(cells[move.x], cells[move.y])
 		else:
 			await get_tree().create_timer(0.75).timeout
@@ -164,4 +176,3 @@ func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 	
 	p2_turn = !p2_turn
 	assign_turn.call_deferred()
-	
