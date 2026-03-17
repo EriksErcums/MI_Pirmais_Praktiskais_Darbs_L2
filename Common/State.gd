@@ -3,6 +3,10 @@ class_name State extends RefCounted
 var nums: PackedInt32Array
 var p1_score: int = 0
 var p2_score: int = 0
+# temp solution -----------
+var is_p1_turn: bool = false
+var children: Array[State] = []
+# -------------------------
 
 # Use this for simulating turns
 func process_turn(pos1: int, pos2: int, p2_turn: bool) -> void:
@@ -43,4 +47,20 @@ func clone() -> State:
 	s.nums = nums.duplicate()
 	s.p1_score = p1_score
 	s.p2_score = p2_score
+	# ?????????????????????
+	s.is_p1_turn = is_p1_turn
 	return s
+
+# migrate to GameTree (temp solution)
+func generate_children() -> void:
+	children = []
+	# Skip if only 1 or 0 cells left
+	if nums.size() <= 1:
+		return
+	
+	# all possible moves (if neccessary)
+	for i: int in nums.size() - 1:
+		var child = clone()
+		child.process_turn(i, i + 1, not is_p1_turn)
+		child.is_p1_turn = not is_p1_turn
+		children.append(child)
