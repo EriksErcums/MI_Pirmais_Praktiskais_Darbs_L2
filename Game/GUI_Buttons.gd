@@ -3,13 +3,13 @@ extends HBoxContainer
 const GameLoop: Script = preload("res://Game/GameLoop.gd")
 const Menu: Script = preload("res://Menu/Menu.gd")
 const MENU_PATH: String = "res://Menu/Menu.tscn"
+const GAME_PATH: String = "res://Game/GameLoop.tscn"
 
 @export var game: GameLoop
 @export var btn_menu: Button
 @export var btn_restart: Button
 
 func _ready() -> void:
-	get_tree().current_scene = game
 	btn_menu.pressed.connect(_on_menu)
 	btn_restart.pressed.connect(_on_restart)
 	game.finished.connect(_on_finished)
@@ -24,7 +24,13 @@ func _on_menu() -> void:
 	game.queue_free()
 
 func _on_restart() -> void:
-	get_tree().reload_current_scene()
+	var game_scene: PackedScene = load(GAME_PATH)
+	var new_game: GameLoop = game_scene.instantiate()
+	new_game.cells_max = game.cells_max
+	new_game.init_turn = game.init_turn
+	new_game.pruning = new_game.pruning
+	game.get_parent().add_child(new_game)
+	game.queue_free()
 
 func _on_finished(_won: bool) -> void:
 	btn_restart.grab_focus()
