@@ -44,3 +44,4 @@ func clone() -> State:
 	s.p1_score = p1_score
 	s.p2_score = p2_score
 	return s
+
