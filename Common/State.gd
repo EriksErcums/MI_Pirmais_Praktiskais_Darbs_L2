@@ -1,8 +1,8 @@
-class_name State extends RefCounted
+class_name State extends Object
 
-var nums: PackedInt32Array
 var p1_score: int = 0
 var p2_score: int = 0
+var nums: PackedInt32Array
 
 # Use this for simulating turns
 func process_turn(pos1: int, pos2: int, p2_turn: bool) -> void:
@@ -24,18 +24,17 @@ func process_turn(pos1: int, pos2: int, p2_turn: bool) -> void:
 	if p2_turn: p2_score += score
 	else: p1_score += score
 
-# Returns a score where higher is better for player 2(AI bot)
-func eval() -> int:
+# Returns a score where higher is better for player 2 (AI bot)
+func eval(p2_turn: bool) -> int:
 	var score: int = (p2_score - p1_score) * 100
+	var sevens: int = 0
 	for i: int in nums.size() - 1:
-		var sum: int = nums[i] + nums[i+1]
-		
-		if sum == 7: score += 45
-		elif sum == 6 || sum == 8: score += 8
-		elif sum == 5 || sum == 9: score += 3
-		
-		if sum > 7: sum -= 6
-		if sum == 3 || sum == 4: score += 2
+		if nums[i] + nums[i+1] == 7: sevens += 1
+	
+	var p2_adv: bool = sevens % 2 != 0
+	if !p2_turn: p2_adv = !p2_adv
+	if p2_adv: score += 10
+	else: score -= 10
 	return score
 
 func clone() -> State:
@@ -44,4 +43,3 @@ func clone() -> State:
 	s.p1_score = p1_score
 	s.p2_score = p2_score
 	return s
-

@@ -19,6 +19,8 @@ const P1_WON_STR: String = "You won!"
 const P2_WON_STR: String = "You lost!"
 const DRAFT_STR: String = "Draft!"
 const COLOR_SHINE: Color = Color(4.5, 4.5, 4.5)
+const TREE_DEPTH: int = 4
+const MIN_WAIT_MSEC: int = 1000
 
 # Input
 var init_turn: bool = false
@@ -31,13 +33,13 @@ var game_tree: GameTree
 var state: State
 var cur_cell: Cell
 var cells: Array[Cell]
-var algo_thread: Thread
+var tree_thread: Thread
 # https://docs.godotengine.org/en/stable/tutorials/performance/using_multiple_threads.html
 
 
 # Init
 func _ready() -> void:
-	algo_thread = Thread.new()
+	tree_thread = Thread.new()
 	p2_turn = init_turn
 	state = State.new()
 	state.nums.resize(cells_max)
@@ -57,11 +59,18 @@ func _ready() -> void:
 		cell_prev = cell
 		cells[i] = cell
 	
-	game_tree = GameTree.new(state, -1)
 	assign_turn()
 
 func _exit_tree() -> void:
-	if algo_thread.is_alive(): algo_thread.wait_to_finish()
+	if tree_thread.is_alive(): tree_thread.wait_to_finish()
+	if game_tree:
+		game_tree.free_states()
+		game_tree.free()
+
+func _create_tree() -> GameTree:
+	var _game_tree: GameTree = GameTree.new(state)
+	if TREE_DEPTH > 0: _game_tree.build_tree(0, TREE_DEPTH, p2_turn)
+	return _game_tree
 
 
 # --- Commands ---
@@ -72,22 +81,34 @@ func assign_turn() -> void:
 		# Bot turn
 		lb_flavor.text = P2_TURN_STR
 		# Blocks the board
-		container.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
-		container.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
+		mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
+		focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
+		
 		if cells.size() > 1:
-			await get_tree().create_timer(1.5).timeout
-			var algo_call: Callable = Algorithms.best_move.bind(state, 4, pruning)
-			algo_thread.start(algo_call)
-			var tree: SceneTree = get_tree()
-			while algo_thread.is_alive(): await tree.physics_frame
-			var move: Vector2i = algo_thread.wait_to_finish()
+			var start_msec: int = Time.get_ticks_msec()
+			tree_thread.start(_create_tree)
+			while tree_thread.is_alive(): await get_tree().physics_frame
+			if game_tree:
+				game_tree.free_states()
+				game_tree.free()
+			game_tree = tree_thread.wait_to_finish()
+			#await get_tree().physics_frame
+			
+			tree_thread.start(Algorithms.best_move.bind(game_tree, 4, pruning))
+			while tree_thread.is_alive(): await get_tree().physics_frame
+			var move: Vector2i = tree_thread.wait_to_finish()
+			
+			var diff: int = Time.get_ticks_msec() - start_msec
+			if diff < MIN_WAIT_MSEC:
+				var delay: float = (MIN_WAIT_MSEC - diff) * 0.001
+				await get_tree().create_timer(delay).timeout
 			_pop_cells(cells[move.x], cells[move.y])
 		else:
 			await get_tree().create_timer(0.75).timeout
 			_pop_cell()
 		# Unblocks the board
-		container.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_INHERITED
-		container.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_INHERITED
+		mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_INHERITED
+		focus_behavior_recursive = Control.FOCUS_BEHAVIOR_INHERITED
 	else:
 		# Player turn
 		lb_flavor.text = P1_TURN_STR
@@ -176,3 +197,4 @@ func _pop_cells(cell1: Cell, cell2: Cell) -> void:
 	
 	p2_turn = !p2_turn
 	assign_turn.call_deferred()
+	

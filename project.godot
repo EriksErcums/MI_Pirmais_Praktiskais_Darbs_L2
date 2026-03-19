@@ -14,6 +14,10 @@ config/name="AI Project Game"
 run/main_scene="uid://dtbxf80dbs1oi"
 config/features=PackedStringArray("4.6", "Forward Plus")
 
+[display]
+
+display_server/driver.linuxbsd="wayland"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

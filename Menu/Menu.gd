@@ -8,7 +8,7 @@ const GAME_PATH: String = "res://Game/GameLoop.tscn"
 
 # @export let's us modify variable from the editor
 # You can get references from scenes you using $<node_path> and get_node()
-# functions too, but they are slower and more inconvinient
+# functions too, but they are slower and less convinient
 @export var slider_cells: HSlider
 @export var label_cells: Label
 @export var checkbtn_turn: CheckButton
@@ -46,7 +46,6 @@ func _on_play_pressed() -> void:
 	var game_scene: PackedScene = load(GAME_PATH)
 	var game: GameLoop = game_scene.instantiate()
 	game.cells_max = cells
-	game.p2_turn = p2_turn
 	game.init_turn = p2_turn
 	game.pruning = pruning
 	get_parent().add_child(game)

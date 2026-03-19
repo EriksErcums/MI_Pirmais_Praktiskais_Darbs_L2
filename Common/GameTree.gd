@@ -1,41 +1,33 @@
-class_name GameTree extends RefCounted
-
-const INF: int = 1 << 30
+class_name GameTree extends Object
 
 var states: Array[State]
 var verticies: Dictionary[int, PackedInt32Array]
 
-func _init(init_state: State, depth: int = -1, is_p1_turn: bool = true) -> void:
+func _init(init_state: State) -> void:
 	states = []
 	verticies = {}
-	var root_state = init_state.clone()
-	states.append(root_state)
-	if depth > 0:
-		build_tree(0, depth, is_p1_turn)
+	states.append(init_state.clone())
+	#if depth > 0: build_tree(0, depth, p2_turn)
 
-func build_tree(state_id: int, depth: int, is_p1_turn: bool) -> void:
-	if depth == 0:
-		return
-	var state = states[state_id]
-	# built-in generate_children() //////////////////
-	var children = []
+func build_tree(state_id: int, depth: int, p2_turn: bool) -> void:
+	if depth == 0: return
+	
+	var state: State = states[state_id]
+	var children: Array[State] = []
 	if state.nums.size() > 1:
-		for i in range(state.nums.size() - 1):
-			var child = state.clone()
-			child.process_turn(i, i + 1, not is_p1_turn)
+		for i: int in state.nums.size() - 1:
+			var child: State = state.clone()
+			child.process_turn(i, i + 1, p2_turn)
 			children.append(child)
+	
 	verticies[state_id] = []
-	for child in children:
-		var child_id = states.size()
+	for child: State in children:
+		var child_id: int = states.size()
 		states.append(child)
 		verticies[state_id].append(child_id)
-		build_tree(child_id, depth - 1, not is_p1_turn)
+		build_tree(child_id, depth - 1, !p2_turn)
 
-
-func add_state(state: State) -> void:
-	states.append(state)
-
-func add_vertice(from_id: int, to_id: int) -> void:
-	if not verticies.has(from_id):
-		verticies[from_id] = []
-	verticies[from_id].append(to_id)
+func free_states() -> void:
+	for state: State in states: state.free()
+	states.clear()
+	verticies.clear()

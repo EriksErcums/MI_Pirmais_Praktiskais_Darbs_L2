@@ -5,63 +5,60 @@ const MAX_INT: int = 99999
 const PLAYER_MOVE: bool = false
 const BOT_MOVE: bool = true
 
-static func best_move(state: State, depth: int, prune: bool) -> Vector2i:
+static func best_move(tree: GameTree, depth: int, prune: bool) -> Vector2i:
 	var best_score: int = MIN_INT
 	var move: Vector2i = Vector2i(-1, -1)
-	print("Board:", state.nums)
+	print("Board: ", tree.states[0].nums)
 	
-	for i: int in state.nums.size() - 1:
-		var _state: State = state.clone()
-		_state.process_turn(i, i+1, BOT_MOVE)
+	# `i` is used only for debugging
+	var i: int = 0
+	for child_id: int in tree.verticies[0]:
 		var score: int
-		if prune: score = alphabeta(_state, depth, best_score, MAX_INT, PLAYER_MOVE)
-		else: score = minimax(_state, depth, PLAYER_MOVE)
+		if prune: score = alphabeta(tree, child_id, depth-1, best_score, MAX_INT, BOT_MOVE)
+		else: score = minimax(tree, child_id, depth-1, BOT_MOVE)
 		
 		print("Move ", i, "+", i+1, " -> score:", score)
 		if score > best_score:
 			best_score = score
 			move = Vector2i(i, i+1)
-	print("Chosen move:", move, " score:", best_score, "\n")
+		i += 1
+	print("Chosen move: ", move, " score:", best_score, "\n")
 	return move
 
-static func minimax(state: State, depth: int, is_maxing: bool) -> int:
+static func minimax(tree: GameTree, state_id: int, depth: int, is_maxing: bool) -> int:
+	var state: State = tree.states[state_id]
 	# Terminal state
 	if state.nums.size() <= 1 || depth == 0:
-		return state.eval()
+		# Trust me this one doesn't leak
+		return state.eval(is_maxing)
 	
 	if is_maxing:
 		var best: int = MIN_INT
-		for i: int in state.nums.size()-1:
-			var _state: State = state.clone()
-			_state.process_turn(i, i+1, BOT_MOVE)
-			var score: int = minimax(_state, depth-1, PLAYER_MOVE)
+		for child_id: int in tree.verticies[state_id]:
+			var score: int = minimax(tree, child_id, depth-1, PLAYER_MOVE)
 			best = max(best, score)
 		return best
 	else:
 		var best: int = MAX_INT
-		for i: int in state.nums.size()-1:
-			var _state: State = state.clone()
-			_state.process_turn(i, i+1, PLAYER_MOVE)
-			var score: int = minimax(_state, depth-1, BOT_MOVE)
+		for child_id: int in tree.verticies[state_id]:
+			var score: int = minimax(tree, child_id, depth-1, BOT_MOVE)
 			best = min(best, score)
 		return best
 
 
-static func alphabeta(state: State, depth: int, alpha: int, beta: int, is_maxing: bool) -> int:
+static func alphabeta(tree: GameTree, state_id: int, depth: int, alpha: int, beta: int, is_maxing: bool) -> int:
+	var state: State = tree.states[state_id]
 	# Terminal state
 	if state.nums.size() <= 1 || depth == 0:
-		return state.eval()
+		return state.eval(is_maxing)
 	
 	# Player 2 (Computer) turn - maximize
 	if is_maxing:
 		var best: int = MIN_INT
-		for i: int in state.nums.size()-1:
-			var _state: State = state.clone()
-			_state.process_turn(i, i+1, BOT_MOVE)
-			var score: int = alphabeta(_state, depth-1, alpha, beta, PLAYER_MOVE)
+		for child_id: int in tree.verticies[state_id]:
+			var score: int = alphabeta(tree, child_id, depth-1, alpha, beta, PLAYER_MOVE)
 			best = max(best, score)
 			alpha = max(alpha, best)
-			
 			# pruning condition
 			if beta <= alpha: break
 		return best
@@ -69,13 +66,10 @@ static func alphabeta(state: State, depth: int, alpha: int, beta: int, is_maxing
 	# Player 1 turn - minimize
 	else:
 		var best: int = MAX_INT
-		for i: int in state.nums.size()-1:
-			var _state: State = state.clone()
-			_state.process_turn(i, i+1, PLAYER_MOVE)
-			var score: int = alphabeta(_state, depth-1, alpha, beta, BOT_MOVE)
+		for child_id: int in tree.verticies[state_id]:
+			var score: int = alphabeta(tree, child_id, depth-1, alpha, beta, BOT_MOVE)
 			best = min(best, score)
 			beta = min(beta, best)
-			
 			#pruning condition
 			if beta <= alpha: break
 		return best
