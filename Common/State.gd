@@ -25,17 +25,8 @@ func process_turn(pos1: int, pos2: int, p2_turn: bool) -> void:
 	else: p1_score += score
 
 # Returns a score where higher is better for player 2 (AI bot)
-func eval(p2_turn: bool) -> int:
-	var score: int = (p2_score - p1_score) * 100
-	var sevens: int = 0
-	for i: int in nums.size() - 1:
-		if nums[i] + nums[i+1] == 7: sevens += 1
-	
-	var p2_adv: bool = sevens % 2 != 0
-	if !p2_turn: p2_adv = !p2_adv
-	if p2_adv: score += 10
-	else: score -= 10
-	return score
+func eval() -> int:
+	return p2_score - p1_score
 
 func clone() -> State:
 	var s: State = State.new()

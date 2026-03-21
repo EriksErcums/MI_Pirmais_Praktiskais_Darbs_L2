@@ -43,7 +43,7 @@ func minimax(tree: GameTree, state_id: int, depth: int, is_maxing: bool) -> int:
 	var state: State = tree.states[state_id]
 	# Terminal state
 	if state.nums.size() <= 1 || depth == 0:
-		return state.eval(is_maxing)
+		return state.eval()
 	
 	if is_maxing:
 		var best: int = MIN_INT
@@ -64,7 +64,7 @@ func alphabeta(tree: GameTree, state_id: int, depth: int, alpha: int, beta: int,
 	var state: State = tree.states[state_id]
 	# Terminal state
 	if state.nums.size() <= 1 || depth == 0:
-		return state.eval(is_maxing)
+		return state.eval()
 	
 	# Player 2 (Computer) turn - maximize
 	if is_maxing:
