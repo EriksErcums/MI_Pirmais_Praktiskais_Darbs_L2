@@ -33,12 +33,14 @@ var game_tree: GameTree
 var state: State
 var cur_cell: Cell
 var cells: Array[Cell]
+var algo: Algorithms
 var tree_thread: Thread
 # https://docs.godotengine.org/en/stable/tutorials/performance/using_multiple_threads.html
 
 
 # Init
 func _ready() -> void:
+	algo = Algorithms.new()
 	tree_thread = Thread.new()
 	p2_turn = init_turn
 	state = State.new()
@@ -94,7 +96,7 @@ func assign_turn() -> void:
 			game_tree = tree_thread.wait_to_finish()
 			#await get_tree().physics_frame
 			
-			tree_thread.start(Algorithms.best_move.bind(game_tree, 4, pruning))
+			tree_thread.start(algo.best_move.bind(game_tree, 4, pruning))
 			while tree_thread.is_alive(): await get_tree().physics_frame
 			var move: Vector2i = tree_thread.wait_to_finish()
 			
@@ -102,6 +104,10 @@ func assign_turn() -> void:
 			if diff < MIN_WAIT_MSEC:
 				var delay: float = (MIN_WAIT_MSEC - diff) * 0.001
 				await get_tree().create_timer(delay).timeout
+			print("Time per cell: ", algo.time_per_cell)
+			print("Time total: ", algo.time_total)
+			print("Time avg: ", algo.time_avg)
+			print("Iterations: ", algo.iterations)
 			_pop_cells(cells[move.x], cells[move.y])
 		else:
 			await get_tree().create_timer(0.75).timeout
