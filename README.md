@@ -10,4 +10,4 @@ Spēles sākumā ir dota ģenerētā skaitļu virkne. Spēlētāji izpilda gāji
 •    nodzēst to skaitli, kas ir palicis bez pāra un atņemt vienu punktu no pretinieka punktu skaita. 
 Spēle beidzas, kad skaitļu virknē paliek viens skaitlis. Uzvar spēlētājs, kam ir vairāk punktu. 
 
-Spēles .exe fails pieejams .bin/AI Project Game.exe
+Spēles palaišanas fails pieejams .bin/AI Project Game.exe
