@@ -31,8 +31,8 @@ use_volk="no"
 
 modules_enabled_by_default="no"
 module_gdscript_enabled="yes"
-#module_text_server_adv_enabled="yes"
-module_text_server_fb_enabled="yes" # Default font will look worse
+module_text_server_adv_enabled="yes"
+#module_text_server_fb_enabled="yes" # Default font will look worse // Might break text layouts
 module_freetype_enabled="yes" # To render fonts
 module_svg_enabled="yes" # To render default theme elements
 #module_raycast_enabled = "yes" # Vulkan NEEDS this

@@ -20,7 +20,9 @@ const P2_WON_STR: String = "You lost!"
 const DRAFT_STR: String = "Draft!"
 const COLOR_SHINE: Color = Color(4.5, 4.5, 4.5)
 const TREE_DEPTH: int = 4
-const MIN_WAIT_MSEC: int = 1000
+const MIN_WAIT_MSEC: int = 750
+# Used diretcly in await, which takes seconds instead
+const BOT_SELECT_SEC: float = 0.25
 
 # Input
 var init_turn: bool = false
@@ -108,9 +110,15 @@ func assign_turn() -> void:
 			print("Time total: ", algo.time_total)
 			print("Time avg: ", algo.time_avg)
 			print("Iterations: ", algo.iterations)
+			
+			cells[move.x].modulate = Color.GREEN
+			await get_tree().create_timer(BOT_SELECT_SEC).timeout
+			cells[move.y].modulate = Color.GREEN
+			await get_tree().create_timer(BOT_SELECT_SEC).timeout
+			cells[move.x].modulate = Color.WHITE
 			_pop_cells(cells[move.x], cells[move.y])
 		else:
-			await get_tree().create_timer(0.75).timeout
+			await get_tree().create_timer(MIN_WAIT_MSEC).timeout
 			_pop_cell()
 		# Unblocks the board
 		mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_INHERITED
