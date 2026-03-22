@@ -33,4 +33,4 @@ func _on_restart() -> void:
 	game.queue_free()
 
 func _on_finished(_won: bool) -> void:
-	btn_restart.grab_focus()
+	btn_restart.grab_focus.call_deferred()
